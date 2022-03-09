@@ -4,6 +4,7 @@ export const dndSettingsSchemata = {
   showNotification: z.boolean(),
   silent: z.boolean(),
   flashTaskbarOnMessage: z.boolean(),
+  openToBackgroundFromTray: z.boolean(),
 };
 
 export const configSchemata = {

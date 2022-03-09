@@ -80,6 +80,12 @@ export function initGeneralSection({$root}: GeneralSectionProps): void {
           </div>
           <div class="setting-control"></div>
         </div>
+        <div class="setting-row" id="openToBackgroundFromTray-option">
+          <div class="setting-description">
+            ${t.__("Open window to background on new message when in tray")}
+          </div>
+          <div class="setting-control"></div>
+        </div>
       </div>
       <div class="title">${t.__("Desktop Notifications")}</div>
       <div class="settings-card">
@@ -218,6 +224,7 @@ export function initGeneralSection({$root}: GeneralSectionProps): void {
   betaUpdateOption();
   updateSidebarOption();
   updateStartAtLoginOption();
+  updateOpenToBackgroundFromTray();
   factoryReset();
   showDesktopNotification();
   enableSpellchecker();
@@ -387,6 +394,23 @@ export function initGeneralSection({$root}: GeneralSectionProps): void {
         ConfigUtil.setConfigItem("showSidebar", newValue);
         ipcRenderer.send("forward-message", "toggle-sidebar", newValue);
         updateSidebarOption();
+      },
+    });
+  }
+
+  function updateOpenToBackgroundFromTray(): void {
+    generateSettingOption({
+      $element: $root.querySelector(
+        "#openToBackgroundFromTray-option .setting-control",
+      )!,
+      value: ConfigUtil.getConfigItem("openToBackgroundFromTray", false),
+      clickHandler: () => {
+        const newValue = !ConfigUtil.getConfigItem(
+          "openToBackgroundFromTray",
+          false,
+        );
+        ConfigUtil.setConfigItem("openToBackgroundFromTray", newValue);
+        updateOpenToBackgroundFromTray();
       },
     });
   }

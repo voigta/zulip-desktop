@@ -8,6 +8,14 @@ function showBadgeCount(
   messageCount: number,
   mainWindow: electron.BrowserWindow,
 ): void {
+  if (
+    !mainWindow.isVisible() &&
+    ConfigUtil.getConfigItem("openToBackgroundFromTray", false)
+  ) {
+    mainWindow.minimize();
+    mainWindow.blur();
+  }
+
   if (process.platform === "win32") {
     updateOverlayIcon(messageCount, mainWindow);
   } else {
