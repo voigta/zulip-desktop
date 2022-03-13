@@ -130,7 +130,10 @@ const toggleGlobalShortcut = (): void => {
     const returnValue = globalShortcut.register(
       "CommandOrControl+Alt+Shift+Z",
       () => {
-        if (mainWindow.isVisible()) {
+        if (mainWindow.isMinimized() && process.platform === "win32") {
+          // This somehow doesn't work properly on linux
+          mainWindow.restore();
+        } else if (mainWindow.isVisible()) {
           mainWindow.minimize();
         } else {
           mainWindow.show();
