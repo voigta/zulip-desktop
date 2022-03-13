@@ -143,6 +143,12 @@ export function initGeneralSection({$root}: GeneralSectionProps): void {
           style="display:${process.platform === "darwin" ? "none" : ""}"
         ></div>
         <div class="setting-row" id="note"></div>
+        <div class="setting-row" id="globalShortcut-option">
+          <div class="setting-description">
+            ${t.__("Ctrl-Alt-Shift-Z to open Zulip")}
+          </div>
+          <div class="setting-control"></div>
+        </div>
       </div>
 
       <div class="title">${t.__("Advanced")}</div>
@@ -235,6 +241,7 @@ export function initGeneralSection({$root}: GeneralSectionProps): void {
   downloadFolder();
   updateQuitOnCloseOption();
   updatePromptDownloadOption();
+  updateGlobalShortcut();
   enableErrorReporting();
   setLocale();
   initSpellChecker();
@@ -436,6 +443,19 @@ export function initGeneralSection({$root}: GeneralSectionProps): void {
         const newValue = !ConfigUtil.getConfigItem("quitOnClose", false);
         ConfigUtil.setConfigItem("quitOnClose", newValue);
         updateQuitOnCloseOption();
+      },
+    });
+  }
+
+  function updateGlobalShortcut(): void {
+    generateSettingOption({
+      $element: $root.querySelector("#globalShortcut-option .setting-control")!,
+      value: ConfigUtil.getConfigItem("globalShortcut", false),
+      clickHandler: () => {
+        const newValue = !ConfigUtil.getConfigItem("globalShortcut", false);
+        ConfigUtil.setConfigItem("globalShortcut", newValue);
+        ipcRenderer.send("toggle-global-shortcut", newValue);
+        updateGlobalShortcut();
       },
     });
   }
